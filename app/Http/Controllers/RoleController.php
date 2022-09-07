@@ -71,7 +71,6 @@ return response()->json(["data"=>$user]  );
         $isValidate = Validator::make($request->all(), [
 
             'cnic' => 'required',
-
             'password' => 'required',
         ]);
 
