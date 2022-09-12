@@ -1,19 +1,119 @@
 <?php
 
 namespace App\Http\Controllers;
+
 use App\Models\Society;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class SocietyController extends Controller
 {
-    public function addsociety (Request $request)
+
+    public function addsociety(Request $request)
 
     {
-        $society = Society ::all();
+
+        $isValidate = Validator::make($request->all(), [
+            'societyname' => 'required',
+            'societyaddress' => 'required',
+            'userid' => 'required|exists:users,id',
 
 
+        ]);
 
-return response()->json(["data"=> $society]);
+
+        if ($isValidate->fails()) {
+            return response()->json([
+                "errors" => $isValidate->errors()->all(),
+                "success" => false
+
+            ], 403);
+        }
+
+
+        $society = new Society();
+
+
+        $society->societyname = $request->societyname;
+        $society->societyaddress = $request->societyaddress;
+        $society->userid = $request->userid;
+        $society->save();
+
+
+        return response()->json(["data" => $society]);
+    }
+
+
+    public  function updatesociety (Request $request)
+
+
+    {
+        $isValidate = Validator::make($request->all(), [
+            'societyname' => 'required',
+            'societyaddress' => 'required',
+            'id' => 'required|exists:societies,id',
+
+
+        ]);
+
+
+        if ($isValidate->fails()) {
+            return response()->json([
+                "errors" => $isValidate->errors()->all(),
+                "success" => false
+
+            ], 403);
+        }
+
+
+        $society = Society::find($request->id);
+
+
+        $society->societyname = $request->societyname;
+        $society->societyaddress = $request->societyaddress;
+        $society->save();
+
+
+        return response()->json([
+            "success"=>true,
+            "data" => $society,
+        "message"=> "society update successfully"
+    ]);
+
+
 
     }
+    public function viewallsocieties($userid)
+
+    {
+
+        // dd($userid);
+
+        $society = Society::where('userid', $userid)->get();
+
+
+        return response()->json(["data" => $society]);
+    }
+    public function deletesociety($id)
+
+    {
+
+        // dd($userid);
+
+        $society = Society::where('id', $id)->delete();
+
+
+        return response()->json(["data" => $society,"message"=>"delete society successfully"]);
+    }
+
+
+     public function     viewsociety($societyid)
+     {
+        $society = Society::where('id', $societyid)->get();
+
+        return response()->json(["data" => $society]);
+
+     }
+
+
 }

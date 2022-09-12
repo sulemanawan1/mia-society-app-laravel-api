@@ -24,6 +24,7 @@ return response()->json(["data"=>$user]  );
 
     public function register(Request $request)
     {
+
         $isValidate = Validator::make($request->all(), [
             'firstname' => 'required|string|max:191',
             'lastname' => 'required|string|max:191',
@@ -107,4 +108,14 @@ return response()->json(["data"=>$user]  );
             ], 401);
         }
     }
+
+
+
+    public function logout (Request $request) {
+
+        
+        $request->user()->currentAccessToken()->delete();
+
+        return response(['message' => 'You have been successfully logged out.'], 200);
+        }
 }

@@ -13,17 +13,19 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('societies', function (Blueprint $table) {
+        Schema::create('users', function (Blueprint $table) {
+
+
             $table->id();
-            $table->string('societyname');
-            $table->string('societyaddress');
+            $table->string('firstname');
+            $table->string('lastname');
+            $table->string('cnic');
+            $table->string('password');
             $table->unsignedBigInteger('roleid');
-            $table->foreign('roleid')->references('id')->on('users');
-
-
-
+            $table->string('rolename');
             $table->timestamps();
         });
+
     }
 
     /**
@@ -33,6 +35,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('societies');
+        Schema::dropIfExists('users');
     }
 };

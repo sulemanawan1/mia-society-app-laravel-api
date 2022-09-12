@@ -13,9 +13,10 @@ class Society extends Model
 
         'societyname',
         'societyaddress',
-        'roleid',
+        'userid'
+
 
     ];
-    
+
     use HasFactory;
 }
