@@ -29,6 +29,8 @@ return response()->json(["data"=>$user]  );
             'firstname' => 'required|string|max:191',
             'lastname' => 'required|string|max:191',
             'cnic' => 'required|unique:users|max:191',
+            'address' => 'required',
+            'mobileno' => 'required|unique:users|max:191',
             'roleid' => 'required',
             'rolename' => 'required',
             'password' => 'required',
@@ -48,6 +50,8 @@ return response()->json(["data"=>$user]  );
         $user->firstname = $request->firstname;
         $user->lastname = $request->lastname;
         $user->cnic = $request->cnic;
+        $user->address= $request->address;
+        $user->mobileno= $request->mobileno;
         $user->roleid = $request->roleid;
         $user->rolename = $request->rolename;
         $user->password = Hash::make($request->password);
@@ -93,7 +97,7 @@ return response()->json(["data"=>$user]  );
 
 
             return response()->json([
-                "success" => false,
+                "success" => true,
                 "data" => $user,
                 "Bearer" => $tk
 
@@ -113,7 +117,7 @@ return response()->json(["data"=>$user]  );
 
     public function logout (Request $request) {
 
-        
+
         $request->user()->currentAccessToken()->delete();
 
         return response(['message' => 'You have been successfully logged out.'], 200);

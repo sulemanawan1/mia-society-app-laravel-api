@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\RoleController;
+use App\Http\Controllers\SubAdminSocietyController;
 use App\Http\Controllers\SocietyController;
 
 
@@ -20,6 +21,13 @@ Route::middleware(['auth:sanctum'])->group(function(){
     //User
     Route::post('logout',[RoleController::class,'logout']);
     Route::get('allusers',[RoleController::class,'allusers']);
+
+    // SubAdminSocieties
+    Route::post('registersubadmin',[SubAdminSocietyController::class,'registersubadmin']);
+    Route::get('viewsubadmin/{id}',[SubAdminSocietyController::class,'viewsubadmin']);
+    Route::get('deletesubadmin/{id}',[SubAdminSocietyController::class,'deletesubadmin']);
+    Route::put('updatesubadmin',[SocietyController::class,'updatesubadmin']);
+
 
 });
 

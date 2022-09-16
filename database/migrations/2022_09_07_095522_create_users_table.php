@@ -20,6 +20,8 @@ return new class extends Migration
             $table->string('firstname');
             $table->string('lastname');
             $table->string('cnic');
+            $table->string('address');
+            $table->string('mobileno');
             $table->string('password');
             $table->unsignedBigInteger('roleid');
             $table->string('rolename');
