@@ -34,7 +34,7 @@ return response()->json(["data"=>$user]  );
             'roleid' => 'required',
             'rolename' => 'required',
             'password' => 'required',
-            'image' => 'required|image|mimes:jpg,png,jpeg,gif,svg|max:2048',
+            'image' => 'required|image|max:2048',
         ]);
 
 
