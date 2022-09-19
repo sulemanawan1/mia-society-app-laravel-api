@@ -23,7 +23,7 @@ class SubAdminSocietyController extends Controller
             'roleid' => 'required',
             'rolename' => 'required',
             'password' => 'required',
-            'image' => 'required|image|mimes:jpg,png,jpeg,gif,svg|max:2048',
+            'image' => 'required|image|max:2048',
             'superadminid' => 'required|exists:users,id',
             'societyid' => 'required|exists:societies,id'
 
