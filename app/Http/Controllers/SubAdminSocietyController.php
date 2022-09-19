@@ -23,6 +23,7 @@ class SubAdminSocietyController extends Controller
             'roleid' => 'required',
             'rolename' => 'required',
             'password' => 'required',
+            'image' => 'required|image|mimes:jpg,png,jpeg,gif,svg|max:2048',
             'superadminid' => 'required|exists:users,id',
             'societyid' => 'required|exists:societies,id'
 
@@ -34,6 +35,9 @@ class SubAdminSocietyController extends Controller
 
             ], 403);
         }
+        $image = $request->file('image');
+        $imageName= time().".".$image->extension();
+        $image->move(public_path('images'), $imageName);
 
         $user = new User;
         $user->firstname = $request->firstname;
@@ -44,12 +48,14 @@ class SubAdminSocietyController extends Controller
         $user->roleid = $request->roleid;
         $user->rolename = $request->rolename;
         $user->password = Hash::make($request->password);
+        $user->image = $imageName;
         $user->save();
         $tk =   $user->createToken('token')->plainTextToken;
         $subadminsociety = new subadminsociety;
         $subadminsociety->superadminid = $request->superadminid;
         $subadminsociety->societyid = $request->societyid;
         $subadminsociety->subadminid = $user->id;
+
         $subadminsociety->save();
 
         return response()->json(
@@ -88,6 +94,7 @@ class SubAdminSocietyController extends Controller
             'mobileno' => 'required|unique:users|max:191',
             'address' => 'required',
             'password' => 'required',
+            'id'=>'required'
 
         ]);
 
@@ -122,7 +129,7 @@ class SubAdminSocietyController extends Controller
 
     {
 
-        $subadmin = subadminsociety::where('superadmin', $id)->get();
+        $subadmin = subadminsociety::where('superadminid', $id)->get();
 
         return response()->json(["data" =>$subadmin]);
 

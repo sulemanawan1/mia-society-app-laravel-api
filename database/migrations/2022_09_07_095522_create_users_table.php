@@ -25,6 +25,7 @@ return new class extends Migration
             $table->string('password');
             $table->unsignedBigInteger('roleid');
             $table->string('rolename');
+            $table->string('image');
             $table->timestamps();
         });
 

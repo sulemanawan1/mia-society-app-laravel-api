@@ -16,6 +16,7 @@ Route::middleware(['auth:sanctum'])->group(function(){
     Route::get('society/viewallsocieties/{userid}',[SocietyController::class,'viewallsocieties']);
     Route::get('society/deletesociety/{id}',[SocietyController::class,'deletesociety']);
     Route::get('society/viewsociety/{societyid}',[SocietyController::class,'viewsociety']);
+    Route::get('society/searchsociety/{q?}',[SocietyController::class,'searchsociety']);
 
 
     //User

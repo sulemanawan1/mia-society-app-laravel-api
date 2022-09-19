@@ -7,7 +7,7 @@ use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Hash;
-
+use Illuminate\Support\Facades\File;
 class RoleController extends Controller
 {
 public function  allusers(){
@@ -34,6 +34,7 @@ return response()->json(["data"=>$user]  );
             'roleid' => 'required',
             'rolename' => 'required',
             'password' => 'required',
+            'image' => 'required|image|mimes:jpg,png,jpeg,gif,svg|max:2048',
         ]);
 
 
@@ -44,8 +45,21 @@ return response()->json(["data"=>$user]  );
 
             ], 403);
         }
-        $user = new User;
 
+    //     $image = $request->image;
+    //       //  base64 encoded
+    //     $image = str_replace('data:image/png;base64,', '', $image);
+    //     $image = str_replace(' ', '+', $image);
+    //     $imageName = time().'.'.'png';
+    //    File::put(public_path('images'). '/' . $imageName, base64_decode($image));
+
+        $image = $request->file('image');
+        $imageName= time().".".$image->extension();
+        $image->move(public_path('images'), $imageName);
+
+
+
+        $user = new User;
 
         $user->firstname = $request->firstname;
         $user->lastname = $request->lastname;
@@ -54,6 +68,7 @@ return response()->json(["data"=>$user]  );
         $user->mobileno= $request->mobileno;
         $user->roleid = $request->roleid;
         $user->rolename = $request->rolename;
+        $user->image=$imageName;
         $user->password = Hash::make($request->password);
         $user->save();
         $tk =   $user->createToken('token')->plainTextToken;
@@ -91,9 +106,9 @@ return response()->json(["data"=>$user]  );
             ], 403);
         } else if (Auth::attempt(['cnic' => $request->cnic, 'password' => $request->password])) {
 
-            $user = Auth::user();
-            $tk =   $request->user()->createToken('token')->plainTextToken;
+            $user = Auth:: user();
 
+            $tk =   $request->user()->createToken('token')->plainTextToken;
 
 
             return response()->json([

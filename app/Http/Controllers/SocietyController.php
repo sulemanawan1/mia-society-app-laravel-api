@@ -16,7 +16,7 @@ class SocietyController extends Controller
         $isValidate = Validator::make($request->all(), [
             'societyname' => 'required',
             'societyaddress' => 'required',
-            'userid' => 'required|exists:users,id',
+            'user_id' => 'required|exists:users,id',
 
 
         ]);
@@ -36,7 +36,7 @@ class SocietyController extends Controller
 
         $society->societyname = $request->societyname;
         $society->societyaddress = $request->societyaddress;
-        $society->userid = $request->userid;
+        $society->user_id = $request->user_id;
         $society->save();
 
 
@@ -89,7 +89,7 @@ class SocietyController extends Controller
 
         // dd($userid);
 
-        $society = Society::where('userid', $userid)->get();
+        $society = Society::where('user_id', $userid)->get();
 
 
         return response()->json(["data" => $society]);
@@ -109,7 +109,17 @@ class SocietyController extends Controller
 
      public function     viewsociety($societyid)
      {
-        $society = Society::where('id', $societyid)->get();
+        $society = Society:: where('id', $societyid)->get() ;
+
+        return response()->json(["data" => $society]);
+
+     }
+
+     public function    searchsociety($q)
+     {
+
+
+         $society = Society::where('societyname','LIKE','%' .$q.'%') ->orWhere('societyaddress','LIKE','%'.$q.'%')->get();
 
         return response()->json(["data" => $society]);
 
