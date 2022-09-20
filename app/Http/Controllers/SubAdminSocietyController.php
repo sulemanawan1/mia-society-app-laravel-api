@@ -136,7 +136,13 @@ class SubAdminSocietyController extends Controller
 
         // $subadmin = subadminsociety::where('superadminid', $id)->get();
 
-        return response()->json(["data" =>$data]);
+        return response()->json(["success"=> true,
+            "data" =>$data
+
+
+            ]
+
+        );
 
 
 
