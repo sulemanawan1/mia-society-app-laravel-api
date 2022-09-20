@@ -128,10 +128,15 @@ class SubAdminSocietyController extends Controller
 
 
     {
+        // $subadmin = subadminsociety::where('superadminid', $id)->get();
 
-        $subadmin = subadminsociety::where('superadminid', $id)->get();
+      $data= subadminsociety::where('superadminid', $id) ->
+      join('users', 'users.id', '=', 'subadminsocieties.superadminid')->get();
 
-        return response()->json(["data" =>$subadmin]);
+
+        // $subadmin = subadminsociety::where('superadminid', $id)->get();
+
+        return response()->json(["data" =>$data]);
 
 
 
