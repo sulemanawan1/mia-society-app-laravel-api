@@ -1,7 +1,6 @@
 <?php
 
 namespace App\Http\Controllers;
-
 use App\Models\subadminsociety;
 use Illuminate\Http\Request;
 use App\Models\User;
@@ -78,7 +77,7 @@ class SubAdminSocietyController extends Controller
 
             "success" => true,
             "data" => $userid,
-            "message" => "Sub admin Deleted successfully"
+            "message" => "Sub Admin Deleted successfully"
         ]);
     }
 
