@@ -1,10 +1,12 @@
 <?php
 
 namespace App\Http\Controllers;
+
 use App\Models\subadminsociety;
 use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Validator;
 
 class SubAdminSocietyController extends Controller
@@ -37,6 +39,9 @@ class SubAdminSocietyController extends Controller
         $image = $request->file('image');
         $imageName= time().".".$image->extension();
         $image->move(public_path('images'), $imageName);
+
+
+
 
         $user = new User;
         $user->firstname = $request->firstname;
@@ -87,13 +92,13 @@ class SubAdminSocietyController extends Controller
 
     {
         $isValidate = Validator::make($request->all(), [
-            'firstname' => 'required|string|max:191',
-            'lastname' => 'required|string|max:191',
-            'cnic' => 'required|unique:users|max:191',
+            'firstname' => 'nullable',
+            'lastname' => 'nullable',
             'mobileno' => 'required|unique:users|max:191',
-            'address' => 'required',
-            'password' => 'required',
-            'id'=>'required'
+            'address' => 'nullable',
+            'password' => 'nullable',
+            'image' => 'nullable|image|max:2048',
+            'id' => 'required|exists:users,id'
 
         ]);
 
@@ -105,16 +110,44 @@ class SubAdminSocietyController extends Controller
 
             ], 403);
         }
-
         $user = User::find($request->id);
 
-        $user->firstname = $request->firstname;
-        $user->lastname = $request->lastname;
-        $user->cnic = $request->cnic;
-        $user->mobileno = $request->mobileno;
-        $user->address = $request->address;
-        $user->password = $request->password;
-        $user->save();
+        $user->firstname = $request->firstname??"";
+        $user->lastname = $request->lastname??"";
+        $user->mobileno = $request->mobileno??"";
+        $user->address = $request->address??"";
+        $user->password = Hash::make($request->password);
+
+        if ($request->hasFile('image'))
+        {
+            $destination=public_path('images\\').$user->image;
+
+            if(File::exists($destination))
+            {
+                print("delete");
+                unlink($destination);
+            }
+            $image = $request->file('image');
+            $imageName= time().".".$image->extension();
+            $image->move(public_path('images'), $imageName);
+         $user->image = $imageName;
+
+
+
+
+        }
+
+
+
+
+
+
+
+              $user->update();
+
+
+
+
 
         return response()->json([
             "success" => true,
@@ -129,23 +162,19 @@ class SubAdminSocietyController extends Controller
     {
         // $subadmin = subadminsociety::where('superadminid', $id)->get();
 
-      $data= subadminsociety::where('superadminid', $id) ->
-      join('users', 'users.id', '=', 'subadminsocieties.superadminid')->get();
+        $data = subadminsociety::where('societyid', $id)->join('users', 'users.id', '=', 'subadminsocieties.superadminid')->get();
 
 
         // $subadmin = subadminsociety::where('superadminid', $id)->get();
 
-        return response()->json(["success"=> true,
-            "data" =>$data
+        return response()->json(
+            [
+                "success" => true,
+                "data" => $data
 
 
             ]
 
         );
-
-
-
-
     }
 }
-

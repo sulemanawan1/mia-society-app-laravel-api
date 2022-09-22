@@ -27,7 +27,7 @@ Route::middleware(['auth:sanctum'])->group(function(){
     Route::post('registersubadmin',[SubAdminSocietyController::class,'registersubadmin']);
     Route::get('viewsubadmin/{id}',[SubAdminSocietyController::class,'viewsubadmin']);
     Route::get('deletesubadmin/{id}',[SubAdminSocietyController::class,'deletesubadmin']);
-    Route::put('updatesubadmin',[SocietyController::class,'updatesubadmin']);
+    Route::post('updatesubadmin',[SubAdminSocietyController::class,'updatesubadmin']);
 
 
 });
