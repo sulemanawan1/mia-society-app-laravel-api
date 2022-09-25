@@ -30,11 +30,11 @@ return response()->json(["data"=>$user]  );
             'lastname' => 'required|string|max:191',
             'cnic' => 'required|unique:users|max:191',
             'address' => 'required',
-            'mobileno' => 'required|unique:users|max:191',
+            'mobileno' => 'required',
             'roleid' => 'required',
             'rolename' => 'required',
             'password' => 'required',
-            'image' => 'required|image|max:2048',
+            'image' => 'required|image',
         ]);
 
 
@@ -55,7 +55,7 @@ return response()->json(["data"=>$user]  );
 
         $image = $request->file('image');
         $imageName= time().".".$image->extension();
-        $image->move(public_path('images'), $imageName);
+        $image->move(public_path('/storage/'), $imageName);
 
 
 

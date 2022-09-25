@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\SubAdminSocietyController;
 use App\Http\Controllers\SocietyController;
+use App\Http\Controllers\ResidentController;
 
 
 Route::middleware(['auth:sanctum'])->group(function(){
@@ -29,6 +30,9 @@ Route::middleware(['auth:sanctum'])->group(function(){
     Route::get('deletesubadmin/{id}',[SubAdminSocietyController::class,'deletesubadmin']);
     Route::post('updatesubadmin',[SubAdminSocietyController::class,'updatesubadmin']);
 
+    // Residents
+
+    Route::post('registerresident',[ResidentController::class,'registerresident']);
 
 });
 
