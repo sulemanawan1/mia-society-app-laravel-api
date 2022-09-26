@@ -96,4 +96,40 @@ class ResidentController extends Controller
 
 
     }
+
+    public function viewresidents($id)
+
+
+
+    {
+        $data = Resident::where('subadminid', $id)->join('users', 'users.id', '=', 'residents.residentid')->get();
+
+
+        return response()->json(
+            [
+                "success" => true,
+                "data" => $data
+
+
+            ]
+
+        );
+
+    }
+
+
+    public function deleteresident($id)
+
+    {
+
+        $resident= Resident::where('residentid', $id)->delete();
+
+        return response()->json([
+
+            "success" => true,
+            "data" => $resident,
+            "message" => "Resident Deleted successfully"
+        ]);
+    }
+
 }
