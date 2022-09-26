@@ -20,11 +20,11 @@ class SubAdminSocietyController extends Controller
             'lastname' => 'required|string|max:191',
             'cnic' => 'required|unique:users|max:191',
             'address' => 'required',
-            'mobileno' => 'required|unique:users|max:191',
+            'mobileno' => 'required',
             'roleid' => 'required',
             'rolename' => 'required',
             'password' => 'required',
-            'image' => 'required|image|max:2048',
+            'image' => 'required|image',
             'superadminid' => 'required|exists:users,id',
             'societyid' => 'required|exists:societies,id'
 
@@ -37,8 +37,9 @@ class SubAdminSocietyController extends Controller
             ], 403);
         }
         $image = $request->file('image');
-        $imageName= time().".".$image->extension();
-        $image->move(public_path('images'), $imageName);
+        $imageName = time() . "." . $image->extension();
+        $image->move(public_path('/storage/'), $imageName);
+
 
 
 
@@ -94,10 +95,10 @@ class SubAdminSocietyController extends Controller
         $isValidate = Validator::make($request->all(), [
             'firstname' => 'nullable',
             'lastname' => 'nullable',
-            'mobileno' => 'required|unique:users|max:191',
+            'mobileno' => 'nullable',
             'address' => 'nullable',
             'password' => 'nullable',
-            'image' => 'nullable|image|max:2048',
+            'image' => 'nullable|image',
             'id' => 'required|exists:users,id'
 
         ]);
@@ -112,29 +113,24 @@ class SubAdminSocietyController extends Controller
         }
         $user = User::find($request->id);
 
-        $user->firstname = $request->firstname??"";
-        $user->lastname = $request->lastname??"";
-        $user->mobileno = $request->mobileno??"";
-        $user->address = $request->address??"";
+        $user->firstname = $request->firstname ?? "";
+        $user->lastname = $request->lastname ?? "";
+        $user->mobileno = $request->mobileno ?? "";
+        $user->address = $request->address ?? "";
         $user->password = Hash::make($request->password);
 
-        if ($request->hasFile('image'))
-        {
-            $destination=public_path('images\\').$user->image;
+        if ($request->hasFile('image')) {
+            $destination = public_path('images\\') . $user->image;
 
-            if(File::exists($destination))
-            {
+            if (File::exists($destination)) {
                 print("delete");
                 unlink($destination);
             }
             $image = $request->file('image');
-            $imageName= time().".".$image->extension();
-            $image->move(public_path('images'), $imageName);
-         $user->image = $imageName;
+            $imageName = time() . "." . $image->extension();
+            $image->move(public_path('/storage/'), $imageName);
 
-
-
-
+            $user->image = $imageName;
         }
 
 
@@ -143,7 +139,7 @@ class SubAdminSocietyController extends Controller
 
 
 
-              $user->update();
+        $user->update();
 
 
 
@@ -162,7 +158,7 @@ class SubAdminSocietyController extends Controller
     {
         // $subadmin = subadminsociety::where('superadminid', $id)->get();
 
-        $data = subadminsociety::where('societyid', $id)->join('users', 'users.id', '=', 'subadminsocieties.superadminid')->get();
+        $data = subadminsociety::where('societyid', $id)->join('users', 'users.id', '=', 'subadminsocieties.subadminid')->get();
 
 
         // $subadmin = subadminsociety::where('superadminid', $id)->get();
