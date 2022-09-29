@@ -35,6 +35,7 @@ Route::middleware(['auth:sanctum'])->group(function(){
     Route::post('registerresident',[ResidentController::class,'registerresident']);
     Route::get('viewresidents/{id}',[ResidentController::class,'viewresidents']);
     Route::get('deleteresident/{id}',[ResidentController::class,'deleteresident']);
+    Route::post('updateresident',[ResidentController::class,'updateresident']);
 
 });
 

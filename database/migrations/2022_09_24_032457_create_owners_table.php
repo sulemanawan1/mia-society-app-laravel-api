@@ -14,9 +14,10 @@ return new class extends Migration
     public function up()
     {
         Schema::create('owners', function (Blueprint $table) {
+
             $table->id();
-            $table->unsignedBigInteger('residentid');
-            $table->foreign('residentid')->references('id')->on('residents')->onDelete('cascade');
+            $table->unsignedBigInteger('residentid')->primarykey();
+            $table->foreign('residentid')->references('residentid')->on('residents')->onDelete('cascade');
             $table->string('ownername');
             $table->string('owneraddress');
             $table->string('ownermobileno');

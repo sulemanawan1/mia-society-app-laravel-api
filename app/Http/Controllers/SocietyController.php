@@ -107,8 +107,10 @@ class SocietyController extends Controller
     }
 
 
-     public function     viewsociety($societyid)
+     public function    viewsociety($societyid)
      {
+
+
         $society = Society:: where('id', $societyid)->get() ;
 
         return response()->json(["data" => $society]);

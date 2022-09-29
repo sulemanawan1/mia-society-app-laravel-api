@@ -56,9 +56,6 @@ return response()->json(["data"=>$user]  );
         $image = $request->file('image');
         $imageName= time().".".$image->extension();
         $image->move(public_path('/storage/'), $imageName);
-
-
-
         $user = new User;
 
         $user->firstname = $request->firstname;

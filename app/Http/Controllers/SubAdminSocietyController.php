@@ -120,7 +120,8 @@ class SubAdminSocietyController extends Controller
         $user->password = Hash::make($request->password);
 
         if ($request->hasFile('image')) {
-            $destination = public_path('images\\') . $user->image;
+            $destination = public_path('storage\\') . $user->image;
+        dd($destination);
 
             if (File::exists($destination)) {
                 print("delete");
@@ -156,6 +157,7 @@ class SubAdminSocietyController extends Controller
 
 
     {
+
         // $subadmin = subadminsociety::where('superadminid', $id)->get();
 
         $data = subadminsociety::where('societyid', $id)->join('users', 'users.id', '=', 'subadminsocieties.subadminid')->get();

@@ -9,7 +9,6 @@ class Resident extends Model
 {
 
 
-    protected $primaryKey = 'residentid';
     use HasFactory;
 
 
@@ -19,7 +18,11 @@ class Resident extends Model
        "subadminid",
        "vechileno",
        "residenttype",
-       "propertytype"
+       "propertytype",
+       "committeemember"
+
+
+
 
 
 

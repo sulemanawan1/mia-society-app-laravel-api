@@ -22,7 +22,7 @@ return new class extends Migration
             $table->string('vechileno');
             $table->string('residenttype');
             $table->string('propertytype');
-            $table->integer('committeemember')->default(0)->change();
+            $table->integer('committeemember');
             $table->timestamps();
 
         });
