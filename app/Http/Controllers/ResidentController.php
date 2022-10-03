@@ -12,10 +12,44 @@ use Illuminate\Support\Facades\File;
 
 class ResidentController extends Controller
 {
+
+
+
+public function searchresident ($subadminid,$q)
+{
+
+    // ->join('users', 'users.id', '=', 'residents.residentid')
+    // ->join('owners', 'owners.residentid', "=", 'residents.residentid');
+
+    $data = User::join('residents', 'users.id',
+     '=', 'residents.residentid')
+     ->Where('residents.subadminid',$subadminid)
+     ->Where('users.firstname','LIKE','%'.$q.'%')
+     ->orWhere('users.lastname','LIKE','%'.$q.'%')
+     ->orWhere('users.mobileno','LIKE','%'.$q.'%')
+     ->orWhere('users.cnic','LIKE','%'.$q.'%')
+     ->orWhere('users.address','LIKE','%'.$q.'%')
+     ->orWhere('residents.vechileno','LIKE','%'.$q.'%')
+     ->paginate(6);
+
+
+return response()->json(
+    [
+        "success" => true,
+        "residentslist" => $data
+    ]
+);
+
+
+
+
+}
+
     public function registerresident(Request $request)
 
 
     {
+
         $isValidate = Validator::make($request->all(), [
             'firstname' => 'required|string|max:191',
             'lastname' => 'required|string|max:191',
@@ -103,7 +137,6 @@ class ResidentController extends Controller
 
 
 
-
         return response()->json(
             [
                 "success" => true,
@@ -135,7 +168,7 @@ class ResidentController extends Controller
         $isValidate = Validator::make($request->all(), [
             'firstname' => 'required|string|max:191',
             'lastname' => 'required|string|max:191',
-            'cnic' => 'required|unique:users|max:191',
+            // 'cnic' => 'required|unique:users|max:191',
             'address' => 'required',
             'mobileno' => 'required',
             // 'roleid' => 'required',
@@ -164,7 +197,7 @@ class ResidentController extends Controller
         $user->lastname = $request->lastname;
         $user->address = $request->address;
         $user->mobileno = $request->mobileno;
-        $user->cnic = $request->cnic;
+        // $user->cnic = $request->cnic;
         if ($request->hasFile('image')) {
             $destination = public_path('storage\\') . $user->image;
 

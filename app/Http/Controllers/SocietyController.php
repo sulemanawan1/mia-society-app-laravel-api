@@ -121,7 +121,8 @@ class SocietyController extends Controller
      {
 
 
-         $society = Society::where('societyname','LIKE','%' .$q.'%') ->orWhere('societyaddress','LIKE','%'.$q.'%')->get();
+         $society =
+         Society::where('societyname','LIKE','%' .$q.'%') ->orWhere('societyaddress','LIKE','%'.$q.'%')->get();
 
         return response()->json(["data" => $society]);
 
