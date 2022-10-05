@@ -21,16 +21,16 @@ public function searchresident ($subadminid,$q)
     // ->join('users', 'users.id', '=', 'residents.residentid')
     // ->join('owners', 'owners.residentid', "=", 'residents.residentid');
 
-    $data = User::join('residents', 'users.id',
-     '=', 'residents.residentid')
-     ->Where('residents.subadminid',$subadminid)
+    $data = User::join(
+        'residents', 'users.id',
+         '=', 'residents.residentid')
+      ->Where('residents.subadminid',$subadminid)
      ->Where('users.firstname','LIKE','%'.$q.'%')
      ->orWhere('users.lastname','LIKE','%'.$q.'%')
      ->orWhere('users.mobileno','LIKE','%'.$q.'%')
      ->orWhere('users.cnic','LIKE','%'.$q.'%')
      ->orWhere('users.address','LIKE','%'.$q.'%')
-     ->orWhere('residents.vechileno','LIKE','%'.$q.'%')
-     ->paginate(6);
+     ->orWhere('residents.vechileno','LIKE','%'.$q.'%')->get();
 
 
 return response()->json(

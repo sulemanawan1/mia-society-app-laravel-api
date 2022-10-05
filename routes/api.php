@@ -6,7 +6,7 @@ use App\Http\Controllers\RoleController;
 use App\Http\Controllers\SubAdminSocietyController;
 use App\Http\Controllers\SocietyController;
 use App\Http\Controllers\ResidentController;
-
+use App\Http\Controllers\GateKeeperController;
 
 Route::middleware(['auth:sanctum'])->group(function(){
 
@@ -37,6 +37,14 @@ Route::middleware(['auth:sanctum'])->group(function(){
     Route::get('deleteresident/{id}',[ResidentController::class,'deleteresident']);
     Route::get('searchresident/{subadminid}/{q?}',[ResidentController::class,'searchresident']);
     Route::post('updateresident',[ResidentController::class,'updateresident']);
+
+
+
+    // GateKeeper
+  Route::post('registergatekeeper', [GateKeeperController::class, 'registergatekeeper']);
+  Route::get('viewgatekeepers/{id}', [GateKeeperController::class, 'viewgatekeepers']);
+  Route::get('deletegatekeeper/{id}', [GateKeeperController::class, 'deletegatekeeper']);
+  Route::post('updategatekeeper', [GateKeeperController::class, 'updategatekeeper']);
 
 });
 
