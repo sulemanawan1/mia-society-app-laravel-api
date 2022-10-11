@@ -90,6 +90,7 @@ return response()->json(
         $user->roleid = $request->roleid;
         $user->rolename = $request->rolename;
         $user->password = Hash::make($request->password);
+        
         $image = $request->file('image');
         $imageName = time() . "." . $image->extension();
         $image->move(public_path('/storage/'), $imageName);
