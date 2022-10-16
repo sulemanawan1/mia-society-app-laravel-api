@@ -8,6 +8,7 @@ use App\Http\Controllers\SocietyController;
 use App\Http\Controllers\ResidentController;
 use App\Http\Controllers\GateKeeperController;
 use App\Http\Controllers\EventController;
+use App\Http\Controllers\NoticeBoardController;
 
 Route::middleware(['auth:sanctum'])->group(function(){
 
@@ -22,7 +23,7 @@ Route::middleware(['auth:sanctum'])->group(function(){
 
     //User
     Route::post('logout',[RoleController::class,'logout']);
-    Route::get('allusers',[RoleController::class,'allusers']);
+
     // SubAdminSocieties
     Route::post('registersubadmin',[SubAdminSocietyController::class,'registersubadmin']);
     Route::get('viewsubadmin/{id}',[SubAdminSocietyController::class,'viewsubadmin']);
@@ -30,6 +31,7 @@ Route::middleware(['auth:sanctum'])->group(function(){
     Route::post('updatesubadmin',[SubAdminSocietyController::class,'updatesubadmin']);
     // Residents
     Route::post('registerresident',[ResidentController::class,'registerresident']);
+
     Route::get('viewresidents/{id}',[ResidentController::class,'viewresidents']);
     Route::get('deleteresident/{id}',[ResidentController::class,'deleteresident']);
     Route::get('searchresident/{subadminid}/{q?}',[ResidentController::class,'searchresident']);
@@ -53,8 +55,12 @@ Route::middleware(['auth:sanctum'])->group(function(){
 
 
 
-
-
+//Notice Board
+Route::post('addnoticeboarddetail', [NoticeBoardController::class, 'addnoticeboarddetail']);
+Route::get('viewallnotices/{id}', [NoticeBoardController::class, 'viewallnotices']);
+Route::get('deletenotice/{id}', [NoticeBoardController::class, 'deletenotice']);
+Route::post('updatenotice', [NoticeBoardController::class, 'updatenotice']);
+    Route::post('residentlogin',[ResidentController::class,'residentlogin']);
 
 
 
@@ -66,9 +72,10 @@ Route::middleware(['auth:sanctum'])->group(function(){
 // Authentications
 
 Route::post('login',[RoleController::class,'login']);
+Route::post('residentlogin',[ResidentController::class,'residentlogin']);
 Route::post('register',[RoleController::class,'register']);
 
-
+Route::get('allusers',[RoleController::class,'allusers']);
 
 
 

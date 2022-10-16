@@ -11,7 +11,9 @@ class Resident extends Model
 
     use HasFactory;
 
+    // protected $primaryKey = 'residentid'; // or null
 
+    // public $incrementing = false;
 
     protected $fillable = [
         "residentid",

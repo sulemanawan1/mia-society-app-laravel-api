@@ -9,7 +9,7 @@ use App\Models\Owner;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\File;
-
+use Illuminate\Support\Facades\Auth;
 class ResidentController extends Controller
 {
 
@@ -90,7 +90,7 @@ return response()->json(
         $user->roleid = $request->roleid;
         $user->rolename = $request->rolename;
         $user->password = Hash::make($request->password);
-        
+
         $image = $request->file('image');
         $imageName = time() . "." . $image->extension();
         $image->move(public_path('/storage/'), $imageName);
@@ -240,4 +240,61 @@ return response()->json(
             "message" => "Resident  Details Updated Successfully"
         ]);
     }
+
+    public function residentlogin(Request $request)
+    {
+
+        $isValidate = Validator::make($request->all(), [
+
+            'cnic' => 'required',
+            'password' => 'required',
+        ]);
+
+
+
+        if ($isValidate->fails()) {
+            return response()->json([
+                "errors" => $isValidate->errors()->all(),
+                "success" => false
+
+            ], 403);
+
+        }
+            // $user = Auth:: user();
+
+            $user = User::where('cnic', $request->cnic)
+            ->join('residents', 'residents.residentid', '=' , 'users.id')->first();
+
+            // dd($user);
+            // if(Hash::check($request->password, $user->password)) {
+
+
+            //     return response()->json(['status'=>'true','message'=>'Email is correct']);
+            // } else {
+            //     return response()->json(['status'=>'false', 'message'=>'password is wrong']);
+            // }
+
+
+
+            $tk =   $request->user()->createToken('token')->plainTextToken;
+
+
+            return response()->json([
+                "success" => true,
+                "data" => $user,
+                "Bearer" => $tk
+
+
+            ]);
+
+
+            // return response()->json([
+            //     "success" => false,
+            //     "data" => "Unauthorized"
+
+            // ], 401);
+
+    }
+
+
 }
