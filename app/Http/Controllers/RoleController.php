@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\subadminsociety;
 use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
@@ -15,7 +16,7 @@ public function  allusers(){
 
 
 // return response()->json(["data"=>$user]  );
-dd(file(public_path('/storage/1665565347.jpg')));
+dd(public_path('/storage/1665565347.jpg'));
 
 return response()->
 file(
@@ -115,15 +116,31 @@ file(
             if($user->roleid==3)
             {
 
-             $users = User::where('cnic', $user->cnic)
+            $users = User::where('cnic', $user->cnic)
             ->join('residents', 'residents.residentid', '=' , 'users.id')->first();
+            $gatekeepers=subadminsociety::where('subadminid',  $users->subadminid)->
+            join('gatekeepers',' gatekeepers.subadminid',"=",'subadminsocieties.subadminid' )->get();
+
+            // ->join('gatekeepers','gatekeepers.subadminid','=','subadminsocieties.subadminid' )->get();
+
+            // dd($gatekeepers);
+// dd($users->subadminid);
+
+
+
+            // ->join('subadminsocieties','subadminsocieties.subadminid','=','residents.subadminid' )
+            // ->join('gatekeepers','gatekeepers.subadminid','=','residents.subadminid' )
+            // ->first();
+
+
+        //    dd($users);
 
             $tk =   $request->user()->createToken('token')->plainTextToken;
 
 
             return response()->json([
                 "success" => true,
-                "data" => $users,
+                "data" => [$gatekeepers],
                 "Bearer" => $tk
 
 

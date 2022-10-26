@@ -17,9 +17,9 @@ return new class extends Migration
             $table->id();
             $table->string('societyname');
             $table->string('societyaddress');
-            $table->unsignedBigInteger('user_id');
-            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
-            
+            $table->unsignedBigInteger('superadminid');
+            $table->foreign('superadminid')->references('id')->on('users')->onDelete('cascade');
+
             $table->timestamps();
         });
     }

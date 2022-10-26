@@ -134,7 +134,7 @@ return response()->json(
         $data = Resident::where('subadminid', $id)
             ->join('users', 'users.id', '=', 'residents.residentid')
 
-            ->join('owners', 'owners.residentid', "=", 'residents.residentid')->paginate(5);
+            ->join('owners', 'owners.residentid', "=", 'residents.residentid')->get();
 
 
 

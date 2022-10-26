@@ -5,20 +5,17 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Event extends Model
+class Report extends Model
 {
     use HasFactory;
 
-
-
     protected $fillable = [
-        "userid"	,
-        "title"	,
+        "residentid",
+        "subadminid",
+        "title",
         "description",
-        "startdate",
-        "enddate"	,
-        "active"
-
+        "date",
+        "status",
+        "statusdescription"
     ];
-
 }

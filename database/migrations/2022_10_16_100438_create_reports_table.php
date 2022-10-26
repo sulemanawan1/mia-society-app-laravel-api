@@ -13,16 +13,17 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('events', function (Blueprint $table) {
+        Schema::create('reports', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('userid');
             $table->foreign('userid')->references('id')->on('users')->onDelete('cascade');
-
+            $table->unsignedBigInteger('subadminid');
+            $table->foreign('subadminid')->references('id')->on('users')->onDelete('cascade');
             $table->string('title');
             $table->string('description');
-            $table->date('startdate');
-            $table->date('enddate');
-            $table->integer('active');
+            $table->date('date');
+            $table->integer('status');
+            $table->string('statusdescription');
             $table->timestamps();
         });
     }
@@ -34,6 +35,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('events');
+        Schema::dropIfExists('reports');
     }
 };
