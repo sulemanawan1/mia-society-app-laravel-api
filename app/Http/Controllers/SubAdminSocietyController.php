@@ -77,7 +77,7 @@ class SubAdminSocietyController extends Controller
 
     {
 
-        $userid = subadminsociety::where('id', $id)->delete();
+        $userid = User::where('id', $id)->delete();
 
         return response()->json([
 

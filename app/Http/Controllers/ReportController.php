@@ -119,7 +119,7 @@ class ReportController extends Controller
     }
     public function reportedresidents($subadminid)
     {
-        $report =  User::where('subadminid', $subadminid)->join('reports', 'reports.userid', '=', 'users.id')->distinct()->get();
+        $report =  User::where('subadminid', $subadminid)->join('reports', 'reports.userid', '=', 'users.id')->where('status',2)->distinct()->get();
         $res = $report->unique('userid');
         //  $data = subadminsociety::where('societyid', $id)->join('users', 'users.id', '=', 'subadminsocieties.subadminid')->get();
         return response()->json([

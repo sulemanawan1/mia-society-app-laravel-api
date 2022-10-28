@@ -1,10 +1,9 @@
 <?php
 
 namespace App\Http\Controllers;
-
-use App\Models\subadminsociety;
 use Illuminate\Http\Request;
 use App\Models\User;
+use App\Models\Gatekeeper;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Hash;
@@ -115,42 +114,24 @@ file(
             // dd($user->roleid);
             if($user->roleid==3)
             {
-
-            $users = User::where('cnic', $user->cnic)
+             $users = User::where('cnic', $user->cnic)
             ->join('residents', 'residents.residentid', '=' , 'users.id')->first();
-            $gatekeepers=subadminsociety::where('subadminid',  $users->subadminid)->
-            join('gatekeepers',' gatekeepers.subadminid',"=",'subadminsocieties.subadminid' )->get();
-
-            // ->join('gatekeepers','gatekeepers.subadminid','=','subadminsocieties.subadminid' )->get();
-
-            // dd($gatekeepers);
-// dd($users->subadminid);
-
-
-
-            // ->join('subadminsocieties','subadminsocieties.subadminid','=','residents.subadminid' )
-            // ->join('gatekeepers','gatekeepers.subadminid','=','residents.subadminid' )
-            // ->first();
-
-
-        //    dd($users);
+            $gatekeeper=GateKeeper::where('subadminid',  $users->subadminid )->join('users','users.id','=','gatekeepers.gatekeeperid')->get();
 
             $tk =   $request->user()->createToken('token')->plainTextToken;
-
-
             return response()->json([
                 "success" => true,
-                "data" => [$gatekeepers],
+                "data" => $users,
+                "gatekeepers"=>$gatekeeper,
                 "Bearer" => $tk
-
-
-            ]);}
-
+            ]);
+        }
            else if($user->roleid==4)
             {
 
             $user = User::where('cnic', $user->cnic)
             ->join('gatekeepers', 'gatekeepers.gatekeeperid', '=' , 'users.id')->first();
+
 
             $tk =   $request->user()->createToken('token')->plainTextToken;
 
