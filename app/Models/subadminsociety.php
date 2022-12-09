@@ -22,7 +22,7 @@ class subadminsociety extends Model
     ];
     use HasFactory;
     protected $hidden = [
-        'password',
+        // 'password',
         'remember_token',
     ];
 

@@ -24,7 +24,7 @@ class SubAdminSocietyController extends Controller
             'roleid' => 'required',
             'rolename' => 'required',
             'password' => 'required',
-            'image' => 'required|image',
+            'image' => 'nullable|image',
             'superadminid' => 'required|exists:users,id',
             'societyid' => 'required|exists:societies,id'
 
@@ -35,16 +35,18 @@ class SubAdminSocietyController extends Controller
                 "success" => false
 
             ], 403);
-        }
+        }  $user = new User;
         $image = $request->file('image');
-        $imageName = time() . "." . $image->extension();
+
+          if($image!=null)
+        {
+        $imageName= time().".".$image->extension();
         $image->move(public_path('/storage/'), $imageName);
+        $user->image=$imageName;}
 
 
 
 
-
-        $user = new User;
         $user->firstname = $request->firstname;
         $user->lastname = $request->lastname;
         $user->cnic = $request->cnic;
@@ -53,7 +55,7 @@ class SubAdminSocietyController extends Controller
         $user->roleid = $request->roleid;
         $user->rolename = $request->rolename;
         $user->password = Hash::make($request->password);
-        $user->image = $imageName;
+        $user->image = $imageName??'images/user.png';
         $user->save();
         $tk =   $user->createToken('token')->plainTextToken;
         $subadminsociety = new subadminsociety;
@@ -97,7 +99,7 @@ class SubAdminSocietyController extends Controller
             'lastname' => 'nullable',
             'mobileno' => 'nullable',
             'address' => 'nullable',
-            'password' => 'nullable',
+            // 'password' => 'nullable',
             'image' => 'nullable|image',
             'id' => 'required|exists:users,id'
 
@@ -117,15 +119,24 @@ class SubAdminSocietyController extends Controller
         $user->lastname = $request->lastname ?? "";
         $user->mobileno = $request->mobileno ?? "";
         $user->address = $request->address ?? "";
-        $user->password = Hash::make($request->password);
+        // $user->password = Hash::make($request->password);
+        // $user->password = $request->password;
 
         if ($request->hasFile('image')) {
-            $destination = public_path('images\\') . $user->image;
+            $destination = public_path('storage\\') . $user->image;
+        // dd($destination);
 
-            if (File::exists($destination)) {
+
+
+            if (File::exists(public_path('storage\\') . 'images/user.png')) {
+                print("delete");
+
+            }
+          else  if (File::exists($destination)) {
                 print("delete");
                 unlink($destination);
             }
+
             $image = $request->file('image');
             $imageName = time() . "." . $image->extension();
             $image->move(public_path('/storage/'), $imageName);
@@ -137,12 +148,7 @@ class SubAdminSocietyController extends Controller
 
 
 
-
-
         $user->update();
-
-
-
 
 
         return response()->json([
@@ -156,6 +162,7 @@ class SubAdminSocietyController extends Controller
 
 
     {
+
         // $subadmin = subadminsociety::where('superadminid', $id)->get();
 
         $data = subadminsociety::where('societyid', $id)->join('users', 'users.id', '=', 'subadminsocieties.subadminid')->get();

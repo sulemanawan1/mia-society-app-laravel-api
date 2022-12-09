@@ -9,17 +9,22 @@ class Resident extends Model
 {
 
 
-    protected $primaryKey = 'residentid';
     use HasFactory;
 
+    // protected $primaryKey = 'residentid'; // or null
 
+    // public $incrementing = false;
 
     protected $fillable = [
         "residentid",
        "subadminid",
        "vechileno",
        "residenttype",
-       "propertytype"
+       "propertytype",
+       "committeemember"
+
+
+
 
 
 

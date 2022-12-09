@@ -5,20 +5,12 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Owner extends Model
+class Eventimage extends Model
 {
-
-
-    // public $incrementing = false;
     use HasFactory;
-
     protected $fillable = [
-        "residentid",
-        "ownername",
-         "owneraddress",
-           "ownermobileno"
-
-
+        "eventid",
+        "image"
 
     ];
 }

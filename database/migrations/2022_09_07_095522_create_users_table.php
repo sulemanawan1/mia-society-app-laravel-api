@@ -26,7 +26,9 @@ return new class extends Migration
             $table->unsignedBigInteger('roleid');
             $table->string('rolename');
             $table->string('image');
+            $table->string('fcmtoken')->nullable();
             $table->timestamps();
+
         });
 
     }

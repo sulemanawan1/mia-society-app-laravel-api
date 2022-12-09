@@ -13,18 +13,18 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('residents', function (Blueprint $table) { 
+        Schema::create('reports', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('userid');
+            $table->foreign('userid')->references('id')->on('users')->onDelete('cascade');
             $table->unsignedBigInteger('subadminid');
             $table->foreign('subadminid')->references('id')->on('users')->onDelete('cascade');
-            $table->unsignedBigInteger('residentid');
-            $table->foreign('residentid')->references('id')->on('users')->onDelete('cascade');
-            $table->string('vechileno');
-            $table->string('residenttype');
-            $table->string('propertytype');
-            $table->integer('committeemember');
+            $table->string('title');
+            $table->string('description');
+            $table->date('date');
+            $table->integer('status');
+            $table->string('statusdescription');
             $table->timestamps();
-
         });
     }
 
@@ -35,6 +35,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('residents');
+        Schema::dropIfExists('reports');
     }
 };
