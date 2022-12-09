@@ -13,24 +13,13 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('users', function (Blueprint $table) {
-
-
+        Schema::create('houses', function (Blueprint $table) {
             $table->id();
-            $table->string('firstname');
-            $table->string('lastname');
-            $table->string('cnic');
+            $table->unsignedBigInteger('sid');
+            $table->foreign('sid')->references('id')->on('streets')->onDelete('cascade');
             $table->string('address');
-            $table->string('mobileno');
-            $table->string('password');
-            $table->unsignedBigInteger('roleid');
-            $table->string('rolename');
-            $table->string('image');
-            $table->string('fcmtoken')->nullable();
             $table->timestamps();
-
         });
-
     }
 
     /**
@@ -40,6 +29,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('users');
+        Schema::dropIfExists('houses');
     }
 };

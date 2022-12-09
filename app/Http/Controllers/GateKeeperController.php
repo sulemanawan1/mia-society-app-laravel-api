@@ -16,7 +16,7 @@ class GateKeeperController extends Controller
             'cnic' => 'required|unique:users|max:191',
             'address' => 'required',
             'mobileno' => 'required',
-            'gateno' => 'required',
+            'gateno' => 'nullable',
             'roleid' => 'required',
             'rolename' => 'required',
             'password' => 'required',
@@ -38,6 +38,7 @@ class GateKeeperController extends Controller
         $user->roleid = $request->roleid;
         $user->rolename = $request->rolename;
         $user->password = Hash::make($request->password);
+        // $user->password = $request->password;
         $image = $request->file('image');
         $imageName = time() . "." . $image->extension();
         $image->move(public_path('/storage/'), $imageName);
@@ -47,7 +48,7 @@ class GateKeeperController extends Controller
         $gatekeeper = new Gatekeeper;
         $gatekeeper->gatekeeperid = $user->id;
         $gatekeeper->subadminid = $request->subadminid;
-        $gatekeeper->gateno = $request->gateno;
+        $gatekeeper->gateno = $request->gateno??'';
         $gatekeeper->save();
         return response()->json(
             [
@@ -94,7 +95,7 @@ class GateKeeperController extends Controller
             'mobileno' => 'required',
             'gateno' => 'required',
             'password' => 'required',
-            'image' => 'required|image',
+            'image' => 'nullable|image',
             "id" => 'required|exists:users,id',
         ]);
         if ($isValidate->fails()) {
@@ -108,7 +109,7 @@ class GateKeeperController extends Controller
         $user->lastname = $request->lastname;
         $user->address = $request->address;
         $user->mobileno = $request->mobileno;
-        $user->password = $request->password;
+        $user->password = Hash::make($request->password);
         if ($request->hasFile('image')) {
             $destination = public_path('storage\\') . $user->image;
             if (File::exists($destination)) {

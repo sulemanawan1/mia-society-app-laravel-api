@@ -90,6 +90,7 @@ return response()->json(
         $user->roleid = $request->roleid;
         $user->rolename = $request->rolename;
         $user->password = Hash::make($request->password);
+        // $user->password = $request->password;
 
         $image = $request->file('image');
         $imageName = time() . "." . $image->extension();
@@ -151,7 +152,7 @@ return response()->json(
 
     {
 
-        $resident = Resident::where('residentid', $id)->delete();
+        $resident = User::where('id', $id)->delete();
 
         return response()->json([
 
@@ -174,7 +175,7 @@ return response()->json(
             'mobileno' => 'required',
             // 'roleid' => 'required',
             // 'rolename' => 'required',
-            // 'password' => 'required',
+            // 'password' => 'nullable',
             'image' => 'nullable|image',
             "id" => 'required|exists:users,id',
             "vechileno" => "nullable",
@@ -198,6 +199,8 @@ return response()->json(
         $user->lastname = $request->lastname;
         $user->address = $request->address;
         $user->mobileno = $request->mobileno;
+        // $user->password = Hash::make($request->password);
+        // $user->password = $request->password;
         // $user->cnic = $request->cnic;
         if ($request->hasFile('image')) {
             $destination = public_path('storage\\') . $user->image;

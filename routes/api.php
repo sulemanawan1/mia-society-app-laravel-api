@@ -1,6 +1,5 @@
 <?php
 
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\SubAdminSocietyController;
@@ -9,7 +8,12 @@ use App\Http\Controllers\ResidentController;
 use App\Http\Controllers\GateKeeperController;
 use App\Http\Controllers\EventController;
 use App\Http\Controllers\NoticeBoardController;
+use App\Http\Controllers\PreApproveEntryController;
 use App\Http\Controllers\ReportController;
+use App\Http\Controllers\PhaseController;
+use App\Http\Controllers\BlockController;
+use App\Http\Controllers\StreetController;
+use App\Http\Controllers\HouseController;
 
 Route::middleware(['auth:sanctum'])->group(function(){
 
@@ -22,7 +26,8 @@ Route::middleware(['auth:sanctum'])->group(function(){
     Route::get('society/searchsociety/{q?}',[SocietyController::class,'searchsociety']);
     //User
     Route::post('logout',[RoleController::class,'logout']);
-
+    Route::post('fcmtokenrefresh',[RoleController::class,'fcmtokenrefresh']);
+    Route::post('resetpassword',[RoleController::class,'resetpassword']);
     // SubAdminSocieties
     Route::post('registersubadmin',[SubAdminSocietyController::class,'registersubadmin']);
     Route::get('viewsubadmin/{id}',[SubAdminSocietyController::class,'viewsubadmin']);
@@ -34,7 +39,6 @@ Route::middleware(['auth:sanctum'])->group(function(){
     Route::get('deleteresident/{id}',[ResidentController::class,'deleteresident']);
     Route::get('searchresident/{subadminid}/{q?}',[ResidentController::class,'searchresident']);
     Route::post('updateresident',[ResidentController::class,'updateresident']);
-
     // GateKeeper
   Route::post('registergatekeeper', [GateKeeperController::class, 'registergatekeeper']);
   Route::get('viewgatekeepers/{id}', [GateKeeperController::class, 'viewgatekeepers']);
@@ -49,7 +53,7 @@ Route::middleware(['auth:sanctum'])->group(function(){
     Route::post('event/updateevent',[EventController::class,'updateevent']);
     Route::get('event/events/{userid}',[EventController::class,'events']);
     Route::get('event/deleteevent/{id}',[EventController::class,'deleteevent']);
-
+    Route::get('event/searchevent/{userid}/{q?}',[EventController::class,'searchevent']);
 
 
 
@@ -68,6 +72,44 @@ Route::get('deletereport/{id}', [ReportController::class, 'deletereport']);
 Route::get('reportedresidents/{subadminid}', [ReportController::class, 'reportedresidents']);
 Route::get('reports/{subadminid}/{userid}', [ReportController::class, 'reports']);
 Route::get('pendingreports/{subadminid}', [ReportController::class, 'pendingreports']);
+Route::get('historyreportedresidents/{subadminid}', [ReportController::class, 'historyreportedresidents']);
+Route::get('historyreports/{subadminid}/{userid}', [ReportController::class, 'historyreports']);
+
+
+// Preapproveentry
+Route::get('getgatekeepers/{subadminid}', [PreApproveEntryController::class, 'getgatekeepers']);
+Route::get('getvisitorstypes', [PreApproveEntryController::class, 'getvisitorstypes']);
+Route::post('addvisitorstypes', [PreApproveEntryController::class, 'addvisitorstypes']);
+Route::post('addpreapproventry', [PreApproveEntryController::class, 'addpreapproventry']);
+Route::post('updatepreapproveentrystatus', [PreApproveEntryController::class, 'updatepreapproveentrystatus']);
+Route::get('viewpreapproveentryreports/{userid}', [PreApproveEntryController::class, 'viewpreapproveentryreports']);
+Route::get('preapproveentryresidents/{userid}', [PreApproveEntryController::class, 'preapproveentryresidents']);
+Route::get('preapproventrynotifications/{userid}', [PreApproveEntryController::class, 'preapproventrynotifications']);
+Route::get('preapproveentries/{userid}', [PreApproveEntryController::class, 'preapproveentries']);
+Route::get('preapproveentryhistories/{userid}', [PreApproveEntryController::class, 'preapproveentryhistories']);
+
+
+
+
+// Phases
+Route::post('addphases', [PhaseController::class, 'addphases']);
+Route::get('phases/{subadminid}', [PhaseController::class, 'phases']);
+Route::get('distinctphases/{subadminid}', [PhaseController::class, 'distinctphases']);
+
+// Blocks
+Route::post('addblocks', [BlockController::class, 'addblocks']);
+Route::get('blocks/{pid}', [BlockController::class, 'blocks']);
+Route::get('distinctblocks/{bid}', [BlockController::class, 'distinctblocks']);
+
+
+// Streets
+Route::post('addstreets', [StreetController::class, 'addstreets']);
+Route::get('streets/{bid}', [StreetController::class, 'streets']);
+
+// Houses
+Route::post('addhouses', [HouseController::class, 'addhouses']);
+Route::get('houses/{sid}', [HouseController::class, 'houses']);
+
 
 
 });

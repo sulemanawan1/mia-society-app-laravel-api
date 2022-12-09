@@ -5,6 +5,7 @@ use App\Models\Report;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use App\Models\User;
+
 class ReportController extends Controller
 {
     public function reporttoadmin(Request $request)
@@ -90,6 +91,13 @@ class ReportController extends Controller
             "data" => $report,
         ]);
     }
+
+
+
+
+
+
+
     public function updatereportstatus(Request $request)
     {
         $isValidate = Validator::make($request->all(), [
@@ -119,7 +127,8 @@ class ReportController extends Controller
     }
     public function reportedresidents($subadminid)
     {
-        $report =  User::where('subadminid', $subadminid)->join('reports', 'reports.userid', '=', 'users.id')->where('status',2)->distinct()->get();
+        $report =  User::where('subadminid', $subadminid)->
+        join('reports', 'reports.userid', '=', 'users.id')->where('status',2)->distinct()->get();
         $res = $report->unique('userid');
         //  $data = subadminsociety::where('societyid', $id)->join('users', 'users.id', '=', 'subadminsocieties.subadminid')->get();
         return response()->json([
@@ -158,6 +167,24 @@ class ReportController extends Controller
                  "reports.created_at",
                  "reports.updated_at",
             )->GET();
+        return response()->json([
+            "success" => true,
+            "data" => $reports
+        ]);
+    }
+    public function historyreportedresidents($subadminid)
+    {
+        $report =  User::where('subadminid', $subadminid)->join('reports', 'reports.userid', '=', 'users.id')->where('status',3)->orwhere('status',4)->distinct()->get();
+        $res = $report->unique('userid');
+        //  $data = subadminsociety::where('societyid', $id)->join('users', 'users.id', '=', 'subadminsocieties.subadminid')->get();
+        return response()->json([
+            "success" => true,
+            "data" => $res->values()->all(),
+        ]);
+    }
+    public function historyreports($subadminid, $userid)
+    {
+        $reports =  Report::where('subadminid', $subadminid)->where('userid', $userid)->where('status','=',3)->orwhere('status' ,'=' , 4)->GET();
         return response()->json([
             "success" => true,
             "data" => $reports

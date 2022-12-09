@@ -5,6 +5,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use App\Models\Event;
 use App\Models\User;
+use App\Models\Resident;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
 
@@ -18,7 +19,6 @@ class EventController extends Controller
         $isValidate = Validator::make($request->all(), [
 
             'userid' => 'required|exists:users,id',
-
              'title' => 'required',
             'description' => 'required',
             'startdate' => 'required|date',
@@ -46,26 +46,24 @@ class EventController extends Controller
         $event->enddate= Carbon::parse($request->enddate)->format('Y-m-d');
         $event->active=$request->active;
         $event->save();
-$user =User::all();
+// $user =User::all();
 
-// foreach($user as $u)
+$residents= Resident::where('subadminid',$request->userid)
+->join('users','users.id','=','residents.residentid')->get();
 
-// {
-// $s= $u->firstname;
-//  var_dump($s);
-// }
-// echo($varr);
+$fcm=[];
 
-        $tk='ct99wz8wTeemXnjYoM0KCe:APA91bEj3t_hU0LKRPCS6lVsvMHJDj_Yg4ES_OneTJBJSgxNi10Wlxpff5ZSX9eVYgZzAyoYP6k6EkGJNI0t2LHJyf39eCGkFAhMiHhU3gSGsAPc75Yz7cpjZ6MnY_KT_V7a_DhlOmdb';
-        $tk1='fHgpOVJBSKClU_yOMhR81g:APA91bHdJ-rg-EVlczuckjwhxS_jL3baO37cbhZj_g7BSvfTV74zgp6GX1IIwX3OX8as4Ka52_aT6bLR6_K3EguZvIA29Z19rf97pHZ5dZ_7GIu_a81-6brFocLLKpNgI4Es1nFBApUq';
-        $tk2='cSxb9-tvSMil-hn_mQXVhJ:APA91bF7Qm38y5CNqRZLRx6pSAJPkagCgZCDwgGu7O7D2BIPnjFm0iO6gdp2e0Wms-GnvaELtwnz0G5G_A-BnsVWzTb5LwLpXfx4-2wZ_Q1QXxmUfms4y_Z3Qhf8fIHCq8QO4lykqbVB';
-        $tk3='cugSpzVDQmqj85UGvTJW8Q:APA91bEt0daEPj1XKFf6UYhvTVE0qls8T_uNJOvZUW6RD_BjlcK-QVln-h23HrpxMufmA12px-v8UZnkuJ68NHHWWZvnMBud86DDhH0L31lYkadxXtdtKxrij2khffgkP8EZKmXyQkA2';
-         $serverkey='AAAAcuxXPmA:APA91bEz-6ptcGS8KzmgmSLjb-6K_bva-so3i6Eyji_ihfncqXttVXjdBQoU6V8sKilzLb9MvSHFId-KK7idDwbGo8aXHpa_zjGpZuDpM67ICKM7QMCGUO_JFULTuZ_ApIOxdF3TXeDR';
+foreach ($residents as $datavals) {
+
+    array_push($fcm, $datavals['fcmtoken']);
+
+}
+
+      $serverkey='AAAAcuxXPmA:APA91bEz-6ptcGS8KzmgmSLjb-6K_bva-so3i6Eyji_ihfncqXttVXjdBQoU6V8sKilzLb9MvSHFId-KK7idDwbGo8aXHpa_zjGpZuDpM67ICKM7QMCGUO_JFULTuZ_ApIOxdF3TXeDR';
         $url = 'https://fcm.googleapis.com/fcm/send';
+        $mydata=['registration_ids'=>$fcm,
 
-        $mydata=['registration_ids'=>[$tk,$tk1,$tk2,$tk3],
-
-        "data"=>$event,
+        "data"=>["data"=>$event],
         "android"=> [
             "priority"=> "high",
             "ttl"=> 60 * 60 * 1,
@@ -194,7 +192,7 @@ $user =User::all();
 
         // dd($userid);
 
-        $event = Event::where('userid', $userid)->get();
+        $event = Event::where('userid', $userid)->orderBy('created_at','desc')->get();
 
 
         return response()->json(["data" => $event]);
@@ -275,6 +273,40 @@ $user =User::all();
 
     }
 
+    public  function searchevent ($userid,$q)
+
+
+    {
+
+
+        if($q=='Newest')
+        {
+$event = Event::where('userid', $userid)->orderBy('created_at','desc')->get();
+
+        }
+      else  if($q=='Oldest')
+        {
+
+            $event = Event::where('userid', $userid)->orderBy('created_at','asc')->get();
+
+        }
+        else if($q=='Default'){
+
+ $event = Event::where('userid', $userid)->orderBy('created_at','desc')->get();;
+
+
+        }
+
+        return response()->json([
+            "success"=>true,
+            "data" => $event,
+
+    ]);
+
+
+
+
+
     }
 
-
+}
