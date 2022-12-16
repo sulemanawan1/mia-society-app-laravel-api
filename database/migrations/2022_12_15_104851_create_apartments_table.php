@@ -13,14 +13,11 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('owners', function (Blueprint $table) {
-
+        Schema::create('apartments', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('residentid')->primarykey();
-            $table->foreign('residentid')->references('residentid')->on('residents')->onDelete('cascade');
-            $table->string('ownername');
-            $table->string('owneraddress');
-            $table->string('ownermobileno');
+            $table->unsignedBigInteger('fid');
+            $table->foreign('fid')->references('id')->on('floors')->onDelete('cascade');
+            $table->string('name');
             $table->timestamps();
         });
     }
@@ -32,6 +29,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('owners');
+        Schema::dropIfExists('apartments');
     }
 };

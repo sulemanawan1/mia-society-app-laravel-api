@@ -13,16 +13,15 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('phases', function (Blueprint $table) {
+        Schema::create('floors', function (Blueprint $table) {
             $table->id();
             $table->string('name');
             $table->unsignedBigInteger('subadminid');
             $table->foreign('subadminid')->references('id')->on('users')->onDelete('cascade');
-            $table->unsignedBigInteger('societyid');
-            $table->foreign('societyid')->references('id')->on('societies')->onDelete('cascade');
+            $table->unsignedBigInteger('buildingid');
+            $table->foreign('buildingid')->references('id')->on('societies')->onDelete('cascade');
 
             $table->timestamps();
-
         });
     }
 
@@ -33,6 +32,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('phases');
+        Schema::dropIfExists('floors');
     }
 };

@@ -14,16 +14,27 @@ use App\Http\Controllers\PhaseController;
 use App\Http\Controllers\BlockController;
 use App\Http\Controllers\StreetController;
 use App\Http\Controllers\HouseController;
+use App\Http\Controllers\FloorController;
+use App\Http\Controllers\ApartmentController;
+use App\Http\Controllers\BuildingResidentController;
+
+
 
 Route::middleware(['auth:sanctum'])->group(function(){
 
 // Society
-    Route::post('society/addsociety',[SocietyController::class,'addsociety']);
-    Route::put('society/updatesociety',[SocietyController::class,'updatesociety']);
-    Route::get('society/viewallsocieties/{userid}',[SocietyController::class,'viewallsocieties']);
-    Route::get('society/deletesociety/{id}',[SocietyController::class,'deletesociety']);
-    Route::get('society/viewsociety/{societyid}',[SocietyController::class,'viewsociety']);
-    Route::get('society/searchsociety/{q?}',[SocietyController::class,'searchsociety']);
+
+// Society
+
+Route::post('society/addsociety', [SocietyController::class, 'addsociety']);
+Route::put('society/updatesociety', [SocietyController::class, 'updatesociety']);
+Route::get('society/viewallsocieties/{userid}', [SocietyController::class, 'viewallsocieties']);
+Route::get('society/deletesociety/{id}', [SocietyController::class, 'deletesociety']);
+Route::get('society/viewsociety/{societyid}', [SocietyController::class, 'viewsociety']);
+Route::get('society/searchsociety/{q?}', [SocietyController::class, 'searchsociety']);
+Route::get('society/filtersocietybuilding/{id}/{q?}', [SocietyController::class, 'filtersocietybuilding']);
+Route::get('society/viewsocietiesforresidents/{type?}', [SocietyController::class, 'viewsocietiesforresidents']);
+// Route::get('society/viewbuildingsforresidents', [SocietyController::class, 'viewbuildingsforresidents']);
     //User
     Route::post('logout',[RoleController::class,'logout']);
     Route::post('fcmtokenrefresh',[RoleController::class,'fcmtokenrefresh']);
@@ -39,6 +50,11 @@ Route::middleware(['auth:sanctum'])->group(function(){
     Route::get('deleteresident/{id}',[ResidentController::class,'deleteresident']);
     Route::get('searchresident/{subadminid}/{q?}',[ResidentController::class,'searchresident']);
     Route::post('updateresident',[ResidentController::class,'updateresident']);
+    Route::get('loginresidentdetails/{residentid}',[ResidentController::class,'loginresidentdetails']);
+    Route::get('unverifiedresident/{subadminid}/{status}',[ResidentController::class,'unverifiedresident']);
+    Route::post('loginresidentupdateaddress',[ResidentController::class,'loginresidentupdateaddress']);
+
+
     // GateKeeper
   Route::post('registergatekeeper', [GateKeeperController::class, 'registergatekeeper']);
   Route::get('viewgatekeepers/{id}', [GateKeeperController::class, 'viewgatekeepers']);
@@ -95,20 +111,45 @@ Route::get('preapproveentryhistories/{userid}', [PreApproveEntryController::clas
 Route::post('addphases', [PhaseController::class, 'addphases']);
 Route::get('phases/{subadminid}', [PhaseController::class, 'phases']);
 Route::get('distinctphases/{subadminid}', [PhaseController::class, 'distinctphases']);
+Route::get('viewphasesforresidents/{societyid}', [PhaseController::class, 'viewphasesforresidents']);
 
 // Blocks
 Route::post('addblocks', [BlockController::class, 'addblocks']);
 Route::get('blocks/{pid}', [BlockController::class, 'blocks']);
 Route::get('distinctblocks/{bid}', [BlockController::class, 'distinctblocks']);
+Route::get('viewblocksforresidents/{phaseid}', [BlockController::class, 'viewblocksforresidents']);
 
 
+Route::get('viewblocksforresidents/{phaseid}', [BlockController::class, 'viewblocksforresidents']);
 // Streets
 Route::post('addstreets', [StreetController::class, 'addstreets']);
 Route::get('streets/{bid}', [StreetController::class, 'streets']);
+Route::get('viewstreetsforresidents/{blockid}', [StreetController::class, 'viewstreetsforresidents']);
 
 // Houses
 Route::post('addhouses', [HouseController::class, 'addhouses']);
 Route::get('houses/{sid}', [HouseController::class, 'houses']);
+Route::get('viewhousesforresidents/{streetid}', [HouseController::class, 'viewhousesforresidents']);
+
+
+    //Bahir ki  Building ka Floors
+    Route::post('addfloors', [FloorController::class, 'addfloors']);
+
+
+
+
+    // Route::get('phases/{subadminid}', [PhaseController::class, 'phases']);
+
+    // Route::get('distinctphases/{subadminid}', [PhaseController::class, 'distinctphases']);
+     Route::get('viewfloorsforresidents/{buildingid}', [FloorController::class, 'viewfloorsforresidents']);
+
+    //Bahir ki  Building ka Apartment
+    Route::post('addapartments', [ApartmentController::class, 'addapartments']);
+    Route::get('viewapartmentsforresidents/{floorid}', [ApartmentController::class, 'viewapartmentsforresidents']);
+
+      // Building Residents
+
+  Route::post('registerbuildingresident', [BuildingResidentController::class, 'registerbuildingresident']);
 
 
 
