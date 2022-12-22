@@ -31,4 +31,10 @@ class Resident extends Model
         "committeemember",
         "status",
     ];
+
+
+    protected $casts = [ "status"=> 'integer',
+
+
+   ];
 }

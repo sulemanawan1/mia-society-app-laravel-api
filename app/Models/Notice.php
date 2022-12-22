@@ -15,4 +15,10 @@ class Notice extends Model
         'status',
         'subadminid',
     ];
+
+
+    protected $casts = [ "subadminid"=> 'integer',
+
+
+];
 }

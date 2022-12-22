@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 use App\Models\Gatekeeper;
 use App\Models\Preapproveentry;
 use Illuminate\Http\Request;
-use App\Models\Visitortype;
 use Carbon\Carbon;
 
 use Illuminate\Support\Facades\Validator;
@@ -81,8 +80,8 @@ public function viewpreapproveentryreports($userid)
     {
         $isValidate = Validator::make($request->all(), [
             'id' => 'required|exists:preapproveentries,id',
-            // 'cnic' => 'nullable',
-            // 'mobileno' => 'nullable',
+            'cnic' => 'nullable',
+            'vechileno' => 'nullable',
             'status' => 'required',
             'statusdescription' => 'required',
 
@@ -99,7 +98,43 @@ public function viewpreapproveentryreports($userid)
 
         $preapproveentryreports = Preapproveentry::Find($request->id);
         $preapproveentryreports->status = $request->status;
-        // $preapproveentryreports->cnic = $request->cnic;
+        $preapproveentryreports->cnic = $request->cnic??'---';
+        $preapproveentryreports->vechileno = $request->vechileno??'---';
+        $preapproveentryreports->updated_at = Carbon::now()->addHour(5)->toDateTimeString();
+        $preapproveentryreports->statusdescription = $request->statusdescription;
+        $preapproveentryreports->update();
+        return response()->json([
+            "success" => true,
+            "data" => $preapproveentryreports,
+            "message" => "Status Updated Successfully"
+        ]);
+
+
+    }
+
+
+
+
+    public function updatepreapproveentrycheckoutstatus(Request $request)
+    {
+        $isValidate = Validator::make($request->all(), [
+            'id' => 'required|exists:preapproveentries,id',
+            'status' => 'required',
+            'statusdescription' => 'required',
+
+        ]);
+
+
+        if ($isValidate->fails()) {
+            return response()->json([
+                "errors" => $isValidate->errors()->all(),
+                "success" => false
+
+            ], 403);
+        }
+
+        $preapproveentryreports = Preapproveentry::Find($request->id);
+        $preapproveentryreports->status = $request->status;
         $preapproveentryreports->updated_at = Carbon::now()->addHour(5)->toDateTimeString();
         $preapproveentryreports->statusdescription = $request->statusdescription;
         $preapproveentryreports->update();
@@ -130,53 +165,7 @@ public function getgatekeepers($subadminid)
 
 }
 
-public function getvisitorstypes()
-{
-    $visitortypes = Visitortype::all();
 
-
-    return response()->json([
-        "success" => true,
-        "data" => $visitortypes,
-
-    ]);
-
-
-
-}
-public function addvisitorstypes(Request $request)
-{
-    $isValidate = Validator::make($request->all(), [
-    'visitortype' => 'required',
-
-
-
-]);
-
-
-if ($isValidate->fails()) {
-    return response()->json([
-        "errors" => $isValidate->errors()->all(),
-        "success" => false
-
-    ], 403);
-}
-
-
-$visitortypes = new Visitortype();
-$visitortypes->visitortype = $request->visitortype;
-
-$visitortypes->save();
-
-
-    return response()->json([
-        "success" => true,
-        "data" => $visitortypes,
-
-    ]);
-
-
-}
 
 
 public function preapproveentryresidents($userid)

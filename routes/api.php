@@ -17,14 +17,12 @@ use App\Http\Controllers\HouseController;
 use App\Http\Controllers\FloorController;
 use App\Http\Controllers\ApartmentController;
 use App\Http\Controllers\BuildingResidentController;
-
+use Illuminate\Support\Facades\Artisan;
 
 
 Route::middleware(['auth:sanctum'])->group(function(){
 
-// Society
 
-// Society
 
 Route::post('society/addsociety', [SocietyController::class, 'addsociety']);
 Route::put('society/updatesociety', [SocietyController::class, 'updatesociety']);
@@ -53,6 +51,7 @@ Route::get('society/viewsocietiesforresidents/{type?}', [SocietyController::clas
     Route::get('loginresidentdetails/{residentid}',[ResidentController::class,'loginresidentdetails']);
     Route::get('unverifiedresident/{subadminid}/{status}',[ResidentController::class,'unverifiedresident']);
     Route::post('loginresidentupdateaddress',[ResidentController::class,'loginresidentupdateaddress']);
+    Route::post('verifyresident',[ResidentController::class,'verifyresident']);
 
 
     // GateKeeper
@@ -98,6 +97,7 @@ Route::get('getvisitorstypes', [PreApproveEntryController::class, 'getvisitorsty
 Route::post('addvisitorstypes', [PreApproveEntryController::class, 'addvisitorstypes']);
 Route::post('addpreapproventry', [PreApproveEntryController::class, 'addpreapproventry']);
 Route::post('updatepreapproveentrystatus', [PreApproveEntryController::class, 'updatepreapproveentrystatus']);
+Route::post('updatepreapproveentrycheckoutstatus', [PreApproveEntryController::class, 'updatepreapproveentrycheckoutstatus']);
 Route::get('viewpreapproveentryreports/{userid}', [PreApproveEntryController::class, 'viewpreapproveentryreports']);
 Route::get('preapproveentryresidents/{userid}', [PreApproveEntryController::class, 'preapproveentryresidents']);
 Route::get('preapproventrynotifications/{userid}', [PreApproveEntryController::class, 'preapproventrynotifications']);
@@ -164,6 +164,15 @@ Route::post('login',[RoleController::class,'login']);
 Route::post('residentlogin',[ResidentController::class,'residentlogin']);
 Route::post('register',[RoleController::class,'register']);
 Route::get('allusers',[RoleController::class,'allusers']);
+
+Route::get('clear_cache', function () {
+
+    Artisan::call('cache:clear');
+
+    // dd("Cache is cleared");
+
+});
+
 
 
 
