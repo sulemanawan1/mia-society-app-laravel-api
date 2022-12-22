@@ -5,25 +5,19 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Resident extends Model
+class Buildingresident extends Model
 {
-
-
     use HasFactory;
-
-
-
     protected $fillable = [
         "residentid",
         "subadminid",
         "country",
         "state",
         "city",
-        "societyname",
-        "phasename",
-        "blockname",
-        "streetname",
-        "houseid",
+        "buildingname",
+        "floorname",
+        "apartmentid",
+
         "houseaddress",
         "vechileno",
         "residenttype",
@@ -31,10 +25,4 @@ class Resident extends Model
         "committeemember",
         "status",
     ];
-
-
-    protected $casts = [ "status"=> 'integer',
-
-
-   ];
 }

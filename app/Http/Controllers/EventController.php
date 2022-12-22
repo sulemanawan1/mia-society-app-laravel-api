@@ -113,59 +113,53 @@ foreach ($residents as $datavals) {
     {
 
 
-        $files = $request->file();
-        dd($files);
 
 
-    }
+        $isValidate = Validator::make(
+            $request->all(), [
+
+            'eventid' => 'required|exists:events,id',
+            'image' => 'required',
+
+        ]);
 
 
+        if ($isValidate->fails()) {
+            return response()->json([
+                "errors" => $isValidate->errors()->all(),
+                "success" => false
 
-    //     $isValidate = Validator::make(
-    //         $request->all(), [
-
-    //         'eventid' => 'required|exists:events,id',
-    //         'image' => 'required',
-
-    //     ]);
-
-
-    //     if ($isValidate->fails()) {
-    //         return response()->json([
-    //             "errors" => $isValidate->errors()->all(),
-    //             "success" => false
-
-    //         ], 403);
-    //     }
+            ], 403);
+        }
 
 
 
-    //     $event = new Event();
+        $event = new Event();
 
-    //     if($request->files->has('image'))
-    //     {
-    //         $images = $request->files->get('image');
+        if($request->files->has('image'))
+        {
+            $images = $request->files->get('image');
 
-    //         dd($images);
+            // dd($images);
 
-    //        foreach( $images as $image)
-    //        {
+           foreach( $images as $image)
+           {
 
-    //         // print($images);
+            print($images);
 
-    //         $image = $request->files->get('image');
-    //         $filename = time() . "." . $image->extension();
-    //         $image->move(public_path('/storage/'), $filename);
+            $image = $request->files->get('image');
+            $filename = time() . "." . $image->extension();
+            $image->move(public_path('/storage/'), $filename);
 
-    //            $event->eventid=$request->eventid;
-    //            $event->image=$filename;
-    //            $event->save();
+               $event->eventid=$request->eventid;
+               $event->image=$filename;
+               $event->save();
 
 
-    //        }
-    //        return response()->json(["data" => $event]);
+           }
+           return response()->json(["data" => $event]);
 
-    //     }
+        }
 
 
 
@@ -181,12 +175,14 @@ foreach ($residents as $datavals) {
 
 
 
-    //     }
+        }
 
 
 
 
-    public function events($userid)
+
+
+        public function events($userid)
 
     {
 

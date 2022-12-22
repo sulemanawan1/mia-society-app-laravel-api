@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Streets;
+use App\Models\Street;
 use App\Models\Phases;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
@@ -130,7 +130,7 @@ class StreetController extends Controller
         }
 
 
-        $streets = new Streets();
+        $streets = new Street();
         $from =(int) $request->from;
         $to =(int) $request->to;
 
@@ -164,7 +164,7 @@ return response()->json([
 
     {
 
-        $streets =  Streets::where('bid', $bid)->get();
+        $streets =  Street::where('bid', $bid)->get();
 
         return response()->json([
             "success" => true,
@@ -174,6 +174,10 @@ return response()->json([
 
 
 
-
+    public function viewstreetsforresidents($blockid)
+    {
+        $streets = Street::where('bid',$blockid)->get();
+        return response()->json(["data" => $streets]);
+    }
 
 }

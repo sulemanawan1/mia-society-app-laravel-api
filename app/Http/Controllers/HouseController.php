@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Houses;
+use App\Models\House;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
@@ -70,7 +70,7 @@ class HouseController extends Controller
                 "success" => false
             ], 403);
         }
-                    $houses= new Houses();
+                    $houses= new House();
                     $from =(int) $request->from;
                     $to =(int) $request->to;
 
@@ -101,7 +101,7 @@ class HouseController extends Controller
 
 public function houses($sid)
 {
-    $houses =  Houses::where('sid', $sid)->get();
+    $houses =  House::where('sid', $sid)->get();
     $noofhouse=  $houses->count($sid);
 
 
@@ -112,6 +112,11 @@ public function houses($sid)
     ]);
 
 }
+public function viewhousesforresidents($streetid)
+    {
+        $house = House::where('sid',$streetid)->get();
+        return response()->json(["data" => $house]);
+    }
 
 
 }

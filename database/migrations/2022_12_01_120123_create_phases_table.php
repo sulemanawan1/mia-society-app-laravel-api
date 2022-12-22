@@ -18,7 +18,11 @@ return new class extends Migration
             $table->string('name');
             $table->unsignedBigInteger('subadminid');
             $table->foreign('subadminid')->references('id')->on('users')->onDelete('cascade');
+            $table->unsignedBigInteger('societyid');
+            $table->foreign('societyid')->references('id')->on('societies')->onDelete('cascade');
+
             $table->timestamps();
+
         });
     }
 

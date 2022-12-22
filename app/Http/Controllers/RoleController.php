@@ -79,16 +79,28 @@ file(
         } else if (Auth::attempt(['cnic' => $request->cnic, 'password' => $request->password])) {
             $user = Auth:: user();
             // dd($user->roleid);
-            if($user->roleid==3)
-            {
-             $users = User::where('cnic', $user->cnic)
-            ->join('residents', 'residents.residentid', '=' , 'users.id')->first();
+        //     if($user->roleid==3)
+        //     {
+        //      $users = User::where('cnic', $user->cnic)
+        //     ->join('residents', 'residents.residentid', '=' , 'users.id')->first();
+        //     $tk =   $request->user()->createToken('token')->plainTextToken;
+        //     return response()->json([
+        //         "success" => true,
+        //         "data" => $users,
+        //         "Bearer" => $tk
+        //     ]);
+        // }
+
+        if ($user->roleid == 3) {
+
+            $users = User::where('cnic', $user->cnic)->first();
             $tk =   $request->user()->createToken('token')->plainTextToken;
             return response()->json([
                 "success" => true,
                 "data" => $users,
                 "Bearer" => $tk
             ]);
+            
         }
            else if($user->roleid==4)
             {

@@ -1,14 +1,22 @@
 <?php
 
 namespace App\Http\Controllers;
-use App\Models\Block;
-use App\Models\Street;
+
+
+use App\Models\Apartment;
+
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
-
-class BlockController extends Controller
+class ApartmentController extends Controller
 {
+    //
+
+
+
+
+
+
     // public function addblocks(Request $request)
 
     // {
@@ -62,14 +70,14 @@ class BlockController extends Controller
     //     ]);
     // }
 
-    public function addblocks(Request $request)
+    public function addapartments(Request $request)
 
     {
 
         $isValidate = Validator::make($request->all(), [
-            'pid' => 'required|exists:phases,id',
-        'from'=>'required|integer',
-        'to'=>'required|integer',
+            'fid' => 'required|exists:floors,id',
+            'from' => 'required|integer',
+            'to' => 'required|integer',
         ]);
 
         if ($isValidate->fails()) {
@@ -79,79 +87,70 @@ class BlockController extends Controller
             ], 403);
         }
 
-        $blocks = new Block();
+        $blocks = new Apartment();
 
-        $from =(int) $request->from;
-        $to =(int) $request->to;
-
-
-
-        for($i=$from;$i<$to+1;$i++){
+        $from = (int) $request->from;
+        $to = (int) $request->to;
 
 
-            $status= $blocks->insert(
-                  [
 
-                    ["name"=>'Block '.$i,
-                    'pid'=>$request->pid,
-                    'created_at'=>date('Y-m-d H:i:s.u'),
-                    'updated_at'=> date('Y-m-d H:i:s.u')],
-
-            ]);
-
-                }
-
-                return response()->json([
-                    "success" => true,
-                    "data" => $status,
-                ]);
-    }
+        for ($i = $from; $i < $to + 1; $i++) {
 
 
-    public function distinctblocks($subadminid)
+            $status = $blocks->insert(
+                [
 
-    {
+                    [
+                        "name" => 'Apartment ' . $i,
+                        'fid' => $request->fid,
+                        'created_at' => date('Y-m-d H:i:s'),
+                        'updated_at' => date('Y-m-d H:i:s')
+                    ],
 
-        $blocks= Street::where('bid', $subadminid)->
-         join('blocks', 'blocks.id', '=', 'streets.id')
-         ->join('phases','phases.id','=','blocks.pid')->distinct()->get();
-        $res = $blocks->unique('bid');
+                ]
+            );
+        }
 
         return response()->json([
             "success" => true,
-            "data" => $res->values()->all(),
+            "data" => $status,
         ]);
     }
 
 
+    // public function distinctapartments($subadminid)
+
+    // {
+
+    //     $blocks = Street::where('bid', $subadminid)->join('blocks', 'blocks.id', '=', 'streets.id')
+    //         ->join('phases', 'phases.id', '=', 'blocks.pid')->distinct()->get();
+    //     $res = $blocks->unique('bid');
+
+    //     return response()->json([
+    //         "success" => true,
+    //         "data" => $res->values()->all(),
+    //     ]);
+    // }
 
 
-    public function blocks($pid)
 
+
+    // public function apartments($pid)
+
+    // {
+
+    //     $blocks =  Block::where('pid', $pid)->get();
+
+    //     return response()->json([
+    //         "success" => true,
+    //         "data" => $blocks,
+    //     ]);
+    // }
+
+    public function viewapartmentsforresidents($floorid)
     {
+        $apartment = Apartment::where('fid', $floorid)->get();
 
-        $blocks =  Block::where('pid', $pid)->get();
-        $firstblock =  Block::where('pid', $pid)->first()->name;
-        $lastblock =  Block::where('pid', $pid)->orderBy('id', 'desc')->first()->name;
-        $nofblocks=  $blocks->count();
-
-
-        return response()->json([
-            "success" => true,
-            "data" => $blocks,
-            "noofblocks"=>$nofblocks,
-            'firstblock'=> $firstblock,
-            'lastblock'=>$lastblock
-        ]);
+        return response()->json(["data" => $apartment]);
     }
-
-
-    public function viewblocksforresidents($phaseid)
-    {
-        $phase = Block::where('pid', $phaseid)->get();
-        return response()->json(["data" => $phase]);
-    }
-
-
-
 }

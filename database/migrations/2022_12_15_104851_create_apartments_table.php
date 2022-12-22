@@ -13,9 +13,11 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('visitortypes', function (Blueprint $table) {
+        Schema::create('apartments', function (Blueprint $table) {
             $table->id();
-            $table->string('visitortype');
+            $table->unsignedBigInteger('fid');
+            $table->foreign('fid')->references('id')->on('floors')->onDelete('cascade');
+            $table->string('name');
             $table->timestamps();
         });
     }
@@ -27,6 +29,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('visitortypes');
+        Schema::dropIfExists('apartments');
     }
 };
